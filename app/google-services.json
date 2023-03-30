@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "901347999337",
+    "firebase_url": "https://arcus-43b7c-default-rtdb.firebaseio.com",
+    "project_id": "arcus-43b7c",
+    "storage_bucket": "arcus-43b7c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901347999337:android:a56c527e968e13f812acf8",
+        "android_client_info": {
+          "package_name": "com.example.arcus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901347999337-m2jiqe0q39s7b6fhts1a1m57rovtticu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGWMt3vV1HIbPor-mLtlLV5lINrWyNc5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901347999337-m2jiqe0q39s7b6fhts1a1m57rovtticu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
