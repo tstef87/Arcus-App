@@ -1,5 +1,6 @@
 package com.example.arcus.ui.register;
 
+import android.icu.text.NumberFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,18 +11,26 @@ import android.widget.TextView;
 import com.example.arcus.R;
 
 import java.util.List;
+import java.util.Locale;
 
 public class ListItemAdapter extends BaseAdapter {
 
 
     private List<String> items;
     private List<Sales> sales;
+    private List<Double> price;
+    private double sum;
 
-    public ListItemAdapter(List<String> items, List<Sales> sales){
+    private TextView textView;
+
+
+    public ListItemAdapter(List<String> items, List<Sales> sales, List<Double> price, double sum, TextView textView){
         this.items = items;
         this.sales = sales;
+        this.price = price;
+        this.sum = sum;
+        this.textView = textView;
     }
-
 
     @Override
     public int getCount() {
@@ -52,6 +61,7 @@ public class ListItemAdapter extends BaseAdapter {
         del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setSum(position);
                 removeItem(position);
             }
         });
@@ -62,7 +72,20 @@ public class ListItemAdapter extends BaseAdapter {
     public void removeItem(int position) {
         items.remove(position);
         sales.remove(position);
+        price.remove(position);
         notifyDataSetChanged();
+
+    }
+
+    public void setSum(int position){
+        sum = 0;
+        for(int i = 0; i < price.size(); i++){
+            sum += price.get(i);
+        }
+        sum -= price.get(position);
+
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.US);
+        textView.setText(numberFormat.format(sum));
     }
 }
 

@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.icu.text.NumberFormat;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TableLayout;
@@ -32,10 +31,13 @@ public class RegisterMenuActivity extends AppCompatActivity {
 
     private List<Sales> saleList;
     private List <String> data;
+    private List<Double> priceList;
     private TableRow tableRow;
 
 
     private double sum = 0.00;
+
+
 
     public void update(List<Sales> sales){
         saleList.clear();
@@ -57,16 +59,18 @@ public class RegisterMenuActivity extends AppCompatActivity {
         db.collection("registers/"+id+"/Sales").add(saleInfo);
     }
 
-    private String addToPrice(Item item, Boolean add){
+    public double getPrice(List <Double> price){
+        double total = 0.0;
+        for (int i = 0; i < price.size(); i++){
+            total += price.get(i);
+        }
+        return total;
+    }
 
-        if(add) {
-            sum += item.getPrice();
-            NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.US);
-            return  numberFormat.format(sum);
-        }
-        else{
-            return "$0.00";
-        }
+    public void setPriceTV (TextView textView){
+
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.US);
+        textView.setText(numberFormat.format(sum));
     }
 
     private int checkList(List arrayList, String name){
@@ -92,10 +96,12 @@ public class RegisterMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_menu);
 
+        TextView price = findViewById(R.id.sum);
         listView = findViewById(R.id.receipt);
         saleList = new ArrayList<Sales>();
         data = new ArrayList<String>();
-        ListItemAdapter listItemAdapter = new ListItemAdapter(data, saleList);
+        priceList = new ArrayList<Double>();
+        ListItemAdapter listItemAdapter = new ListItemAdapter(data, saleList, priceList, sum, price);
         //adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
 
 
@@ -105,7 +111,6 @@ public class RegisterMenuActivity extends AppCompatActivity {
         if (extras != null) {
             items = (ArrayList<Item>) getIntent().getSerializableExtra("itemList");
         }
-        TextView price = findViewById(R.id.sum);
 
         TableLayout tableLayout = findViewById(R.id.table);
 
@@ -129,21 +134,24 @@ public class RegisterMenuActivity extends AppCompatActivity {
             itemButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    price.setText(addToPrice(item, true));
 
-                    int index = checkList(saleList, item.getName());
+                   int index = checkList(saleList, item.getName());
 
-                    if (index > -1) {
-                        Sales saleItem = saleList.get(index);
-                        saleItem.setAmount(saleItem.getAmount() + 1);
-                        data.set(index, saleItem.toString());
-                    } else {
-                        Sales sales = new Sales(item.getName(), 1, item.getPrice());
-                        saleList.add(sales);
-                        data.add(sales.toString());
-                    }
+                   if (index > -1) {
+                       Sales saleItem = saleList.get(index);
+                       saleItem.setAmount(saleItem.getAmount() + 1);
+                       data.set(index, saleItem.toString());
+                       priceList.set(index, priceList.get(index) + item.getPrice());
 
-                    listView.setAdapter(listItemAdapter);
+                   }else {
+                       Sales sales = new Sales(item.getName(), 1, item.getPrice());
+                       saleList.add(sales);
+                       data.add(sales.toString());
+                       priceList.add(sales.getPrice());
+                   }
+                   sum = getPrice(priceList);
+                   setPriceTV(price);
+                   listView.setAdapter(listItemAdapter);
                 }
             });
         }
@@ -159,10 +167,10 @@ public class RegisterMenuActivity extends AppCompatActivity {
                     Item i = new Item();
                     sum = 0.00;
                     data.clear();
+                    priceList.clear();
                     saleList.clear();
-                    //listView.setAdapter(adapter);
                     listView.setAdapter(listItemAdapter);
-                    price.setText(addToPrice(i, false));
+                    setPriceTV(price);
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "No Items in List", Toast.LENGTH_SHORT).show();
