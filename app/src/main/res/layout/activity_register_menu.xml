@@ -6,16 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".ui.register.RegisterMenuActivity">
 
+
     <LinearLayout
+        android:id="@+id/linear"
         android:layout_width="5in"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:id="@+id/linear"
-        android:orientation="horizontal">
+        android:layout_marginStart="3dp"
+        android:orientation="horizontal"
+        tools:ignore="InOrMmUsage">
 
 
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/table"
+            >
+
+        </TableLayout>
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/linearPrice"
