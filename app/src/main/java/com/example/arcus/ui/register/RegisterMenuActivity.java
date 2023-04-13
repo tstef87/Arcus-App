@@ -1,13 +1,19 @@
 package com.example.arcus.ui.register;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.icu.text.NumberFormat;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -166,14 +172,15 @@ public class RegisterMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!data.isEmpty()) {
-                    addSale(data, sum, id);
-                    Item i = new Item();
-                    sum = 0.00;
-                    data.clear();
-                    priceList.clear();
-                    saleList.clear();
-                    listView.setAdapter(listItemAdapter);
-                    setPriceTV(price);
+                    showPopUp(view);
+//                    addSale(data, sum, id);
+//                    Item i = new Item();
+//                    sum = 0.00;
+//                    data.clear();
+//                    priceList.clear();
+//                    saleList.clear();
+//                    listView.setAdapter(listItemAdapter);
+//                    setPriceTV(price);
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "No Items in List", Toast.LENGTH_SHORT).show();
@@ -184,7 +191,40 @@ public class RegisterMenuActivity extends AppCompatActivity {
         Button logOut = findViewById(R.id.logOut1);
         logOut.setOnClickListener(view -> startActivity(new Intent(RegisterMenuActivity.this, SignInPage.class)));
 
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
 
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.drop_down_menu, menu);
+
+        return true;
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.logoutItem:
+                startActivity(new Intent(RegisterMenuActivity.this, SignInPage.class));
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    public void showPopUp(View view) {
+        // Create a new AlertDialog object and set its content to your pop-up layout
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.my_popup_layout, null);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
