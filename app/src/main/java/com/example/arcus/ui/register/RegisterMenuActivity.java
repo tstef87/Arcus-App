@@ -2,6 +2,7 @@ package com.example.arcus.ui.register;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.icu.text.NumberFormat;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.arcus.R;
 import com.example.arcus.signin.Item;
+import com.example.arcus.signin.SignInPage;
+import com.example.arcus.ui.DashboardActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -177,6 +180,10 @@ public class RegisterMenuActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Button logOut = findViewById(R.id.logOut1);
+        logOut.setOnClickListener(view -> startActivity(new Intent(RegisterMenuActivity.this, SignInPage.class)));
+
 
 
     }

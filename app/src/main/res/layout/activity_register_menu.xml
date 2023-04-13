@@ -22,6 +22,12 @@
             android:layout_height="match_parent"
             android:id="@+id/table"
             >
+            <TableRow>
+                <Button
+                    android:id="@+id/logOut1"
+                    android:text="Logout"
+                    />
+            </TableRow>
 
         </TableLayout>
     </LinearLayout>
