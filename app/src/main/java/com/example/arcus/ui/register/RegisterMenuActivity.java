@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 import com.example.arcus.R;
 import com.example.arcus.signin.Item;
 import com.example.arcus.signin.SignInPage;
-import com.example.arcus.ui.DashboardActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -187,10 +185,6 @@ public class RegisterMenuActivity extends AppCompatActivity {
                 }
             }
         });
-
-        Button logOut = findViewById(R.id.logOut1);
-        logOut.setOnClickListener(view -> startActivity(new Intent(RegisterMenuActivity.this, SignInPage.class)));
-
     }
 
     @Override
@@ -222,7 +216,7 @@ public class RegisterMenuActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.my_popup_layout, null);
+        View dialogView = inflater.inflate(R.layout.subtotal_popup, null);
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
         dialog.show();
