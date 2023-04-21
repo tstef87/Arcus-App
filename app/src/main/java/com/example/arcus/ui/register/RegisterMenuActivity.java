@@ -182,6 +182,8 @@ public class RegisterMenuActivity extends AppCompatActivity {
         checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                sum = getPrice(priceList);
+                setPriceTV(price);
                 if(!data.isEmpty()) {
                     tipScreen(view, tipTaxCalc(sum, .2), tipTaxCalc(sum, .18), tipTaxCalc(sum, .15), id, price, listItemAdapter);
                 }
