@@ -1,74 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.register.RegisterMenuActivity">
+    tools:context=".ui.register.RegisterMenuActivity"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.7">
 
 
-    <LinearLayout
-        android:id="@+id/linear"
-        android:layout_width="5in"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="3dp"
-        android:orientation="horizontal"
-        tools:ignore="InOrMmUsage">
-
-
-        <TableLayout
+        <LinearLayout
+            android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/table"
-            >
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="3dp"
+            android:orientation="horizontal"
+            tools:ignore="InOrMmUsage">
 
 
-        </TableLayout>
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearPrice"
-        android:layout_width="3in"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/total"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:paddingLeft="20dp"
-            android:text="Total"
-            android:textSize="36dp" />
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/table"
+                >
 
-        <TextView
-            android:id="@+id/sum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingBottom="10dp"
-            android:text="$0.00"
-            android:textSize="72dp" />
+            </TableLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight=".3">
 
-        <ListView
-            android:id="@+id/receipt"
+        <LinearLayout
+            android:id="@+id/linearPrice"
             android:layout_width="match_parent"
-            android:layout_height="450dp">
-        </ListView>
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical">
 
-        <Button
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="150dp"
-            android:id="@+id/checkout"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="Check Out" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight=".3"/>
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:paddingLeft="20dp"
+                android:text="Total"
+                android:textSize="36dp" />
+
+            <TextView
+                android:id="@+id/sum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingBottom="10dp"
+                android:text="$0.00"
+                android:textSize="72dp" />
 
 
+            <ListView
+                android:id="@+id/receipt"
+                android:layout_width="match_parent"
+                android:layout_height="450dp">
+            </ListView>
 
+            <Button
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:id="@+id/checkout"
+                android:textSize="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check Out" />
 
-</RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>
