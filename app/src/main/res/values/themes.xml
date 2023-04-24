@@ -19,6 +19,14 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Button.Green" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">#2AC500</item>
+    </style>
+
+    <style name="Button.Red" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">#FF0000</item>
+    </style>
+
     <style name="Theme.Arcus.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Arcus.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

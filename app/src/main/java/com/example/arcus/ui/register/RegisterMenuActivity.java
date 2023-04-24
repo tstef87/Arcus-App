@@ -139,6 +139,10 @@ public class RegisterMenuActivity extends AppCompatActivity {
             Button itemButton = new Button(this);
             Item item = items.get(i);
             itemButton.setText(item.getName());
+            itemButton.setWidth(400);
+            itemButton.setHeight(400);
+            itemButton.setTextSize(20);
+
 
             if(i % 4 == 0 || i == 0) {
                 tableRow = new TableRow(this);
