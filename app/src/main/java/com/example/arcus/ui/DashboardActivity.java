@@ -24,8 +24,12 @@ import com.example.arcus.signin.Item;
 import com.example.arcus.signin.SignInPage;
 import com.example.arcus.ui.register.ListItemAdapter;
 import com.example.arcus.ui.register.RegisterMenuActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -88,22 +92,15 @@ public class DashboardActivity extends AppCompatActivity {
             reggid.setText(id);
         }
 
-
-
         Button logout = findViewById(R.id.logout);
         logout.setOnClickListener(view -> startActivity(new Intent(DashboardActivity.this, SignInPage.class)));
-
-
 
         Button goToReg = findViewById(R.id.goToReg);
         goToReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 pin(view.getContext());
-                //Intent openMenu = new Intent(DashboardActivity.this, RegisterMenuActivity.class);
-                //openMenu.putExtra("itemList", itemArrayList);
-                //openMenu.putExtra("ID", id);
-                //startActivity(openMenu);
+
             }
         });
 
@@ -221,10 +218,40 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent openMenu = new Intent(DashboardActivity.this, RegisterMenuActivity.class);
-                openMenu.putExtra("itemList", itemArrayList);
-                openMenu.putExtra("ID", id);
-                startActivity(openMenu);
+
+                if (pin.isEmpty()) {
+                    pinNum.setError("Invalid Pin");
+                    pinNum.requestFocus();
+                    return;
+                }
+
+                DocumentReference documentReference = db.collection("employee").document(pin);
+                documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            if(documentSnapshot.exists()){
+                                String p = String.valueOf(documentSnapshot.get("pin"));
+
+
+                                if(p.equals(pin)){
+                                    Toast.makeText(DashboardActivity.this, "Logged in", Toast.LENGTH_LONG).show();
+                                    Intent openMenu = new Intent(DashboardActivity.this, RegisterMenuActivity.class);
+                                    openMenu.putExtra("pin", pin);
+                                    openMenu.putExtra("itemList", itemArrayList);
+                                    openMenu.putExtra("ID", id);
+                                    startActivity(openMenu);
+
+                                }
+
+                            }
+                        }
+                        else{
+                            Toast.makeText(DashboardActivity.this, "Inavild Pin", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
 
             }
         });
