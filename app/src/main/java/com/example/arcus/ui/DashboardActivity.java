@@ -238,7 +238,7 @@ public class DashboardActivity extends AppCompatActivity {
                                 if(p.equals(pin)){
                                     Toast.makeText(DashboardActivity.this, "Logged in", Toast.LENGTH_LONG).show();
                                     Intent openMenu = new Intent(DashboardActivity.this, RegisterMenuActivity.class);
-                                    openMenu.putExtra("pin", pin);
+                                    openMenu.putExtra("PIN", pin);
                                     openMenu.putExtra("itemList", itemArrayList);
                                     openMenu.putExtra("ID", id);
                                     startActivity(openMenu);
