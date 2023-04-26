@@ -5,15 +5,21 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:visibility="visible"
-    tools:visibility="visible">
+    tools:visibility="visible"
+    android:background="#000000">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="380dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
+            android:background="#4A4A4A"
+            android:textColor="#F6F5F5"
             android:text="TBD"
             android:id="@+id/pinNum"
             android:textAlignment="center"
@@ -26,6 +32,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:backgroundTint="#4A4A4A"
             android:id="@+id/button1"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -35,6 +42,7 @@
             android:textSize="50dp" />
 
         <Button
+            android:backgroundTint="#4A4A4A"
             android:id="@+id/button2"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -44,6 +52,7 @@
             android:textSize="50dp" />
 
         <Button
+            android:backgroundTint="#4A4A4A"
             android:id="@+id/button3"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -59,6 +68,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:backgroundTint="#4A4A4A"
             android:id="@+id/button4"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -68,6 +78,7 @@
             android:textSize="50dp" />
 
         <Button
+            android:backgroundTint="#4A4A4A"
             android:id="@+id/button5"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -77,6 +88,7 @@
             android:textSize="50dp" />
 
         <Button
+            android:backgroundTint="#4A4A4A"
             android:id="@+id/button6"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -92,6 +104,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:backgroundTint="#4A4A4A"
             android:id="@+id/button7"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -101,6 +114,7 @@
             android:textSize="50dp" />
 
         <Button
+            android:backgroundTint="#4A4A4A"
             android:id="@+id/button8"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -110,6 +124,7 @@
             android:textSize="50dp" />
 
         <Button
+            android:backgroundTint="#4A4A4A"
             android:id="@+id/button9"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -127,6 +142,7 @@
 
 
         <Button
+
             android:id="@+id/buttonX"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -137,6 +153,7 @@
             android:backgroundTint="#FF0000" />
 
         <Button
+            android:backgroundTint="#4A4A4A"
             android:id="@+id/button0"
             android:layout_width="100dp"
             android:layout_height="100dp"
