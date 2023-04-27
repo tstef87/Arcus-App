@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,8 +36,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class DashboardActivity extends AppCompatActivity {
     public String pin;
@@ -84,7 +83,6 @@ public class DashboardActivity extends AppCompatActivity {
 
 
         TextView reggid = findViewById(R.id.reg_id);
-        TextView itemList = findViewById(R.id.item_list);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -134,8 +132,8 @@ public class DashboardActivity extends AppCompatActivity {
         Button button9 = dialogPin.findViewById(R.id.button9);
         Button button0 = dialogPin.findViewById(R.id.button0);
 
-        Button go = dialogPin.findViewById(R.id.buttonGo);
-        Button back = dialogPin.findViewById(R.id.buttonX);
+        ImageButton go = dialogPin.findViewById(R.id.buttonGo);
+        ImageButton back = dialogPin.findViewById(R.id.buttonX);
 
 
         button1.setOnClickListener(new View.OnClickListener() {
@@ -241,6 +239,7 @@ public class DashboardActivity extends AppCompatActivity {
                                     openMenu.putExtra("PIN", pin);
                                     openMenu.putExtra("itemList", itemArrayList);
                                     openMenu.putExtra("ID", id);
+                                    dialogPin.dismiss();
                                     startActivity(openMenu);
 
                                 }

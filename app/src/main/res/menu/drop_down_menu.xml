@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/signoutItem"
+        android:icon="@drawable/logout"
+        android:title="Sign Out of Profile"
+        />
     <item android:id="@+id/logoutItem"
         android:icon="@drawable/logout"
-        android:title="Logout"
+        android:title="Logout out of Revenue Center"
         />
 
 </menu>

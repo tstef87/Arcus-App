@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -23,6 +24,11 @@ import android.widget.Toast;
 import com.example.arcus.R;
 import com.example.arcus.signin.Item;
 import com.example.arcus.signin.SignInPage;
+import com.example.arcus.ui.DashboardActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +37,7 @@ import java.util.Locale;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import java.util.Objects;
 
 public class RegisterMenuActivity extends AppCompatActivity {
 
@@ -217,13 +224,159 @@ public class RegisterMenuActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()){
+            case R.id.signoutItem:
+                startActivity(new Intent(RegisterMenuActivity.this, DashboardActivity.class));
+                return true;
+
             case R.id.logoutItem:
-                startActivity(new Intent(RegisterMenuActivity.this, SignInPage.class));
+                pinPad(RegisterMenuActivity.this);
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
 
+        }
+    }
+
+    public String pin = "";
+
+    public void pinPad(Context context){
+        String code = "198008";
+
+        Dialog dialogPin = new Dialog(context);
+        dialogPin.setContentView(R.layout.pinlayout);
+        dialogPin.show();
+
+        TextView pinNum = dialogPin.findViewById(R.id.pinNum);
+        pinNum.setText("");
+
+        Button button1 = dialogPin.findViewById(R.id.button1);
+        Button button2 = dialogPin.findViewById(R.id.button2);
+        Button button3 = dialogPin.findViewById(R.id.button3);
+        Button button4 = dialogPin.findViewById(R.id.button4);
+        Button button5 = dialogPin.findViewById(R.id.button5);
+        Button button6 = dialogPin.findViewById(R.id.button6);
+        Button button7 = dialogPin.findViewById(R.id.button7);
+        Button button8 = dialogPin.findViewById(R.id.button8);
+        Button button9 = dialogPin.findViewById(R.id.button9);
+        Button button0 = dialogPin.findViewById(R.id.button0);
+
+        ImageButton go = dialogPin.findViewById(R.id.buttonGo);
+        ImageButton back = dialogPin.findViewById(R.id.buttonX);
+
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addto("1", pinNum);
+
+            }
+        });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addto("2", pinNum);
+
+            }
+        });
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addto("3", pinNum);
+            }
+        });
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addto("4", pinNum);
+
+            }
+        });
+        button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addto("5", pinNum);
+
+            }
+        });
+        button6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addto("6", pinNum);
+
+            }
+        });
+        button7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addto("7", pinNum);
+
+            }
+        });
+        button8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addto("8", pinNum);
+
+            }
+        });
+        button9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addto("9", pinNum);
+
+            }
+        });
+        button0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addto("0", pinNum);
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                subtractFromPin();
+                pinNum.setText(pin);
+            }
+        });
+        go.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (pin.isEmpty()) {
+                    pin = "";
+                    pinNum.setHint("Pin Can Not Be Empty");
+                }
+
+                else if (pin.equals(code)) {
+                    startActivity(new Intent(RegisterMenuActivity.this, SignInPage.class));
+                }
+
+                else{
+                    pin = "";
+                    pinNum.setHint("INVALID PIN");
+                }
+
+            }
+        });
+
+    }
+
+    public void addto(String p, TextView textView){
+        if(pin == null || pin.length() <= 0){
+            pin = p;
+        }
+        else{
+            pin = pin + p;
+        }
+        textView.setText(pin);
+    }
+
+    public void subtractFromPin() {
+        if (pin != null && pin.length() > 0) {
+            pin = pin.substring(0, pin.length() - 1);
         }
     }
 
