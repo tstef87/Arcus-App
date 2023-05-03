@@ -44,11 +44,11 @@ public class DashboardActivity extends AppCompatActivity {
 
 
     private static ArrayList<Item> itemArrayList = new ArrayList<>();;
-    private String id = "";
+    private String id, rc = "";
 
     private void updateDataB(String id){
         itemArrayList.clear();
-        db.collection("registers/"+id+"/items").get()
+        db.collection("RevenueCenter/"+id+"/ItemList").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -56,9 +56,7 @@ public class DashboardActivity extends AppCompatActivity {
                             Log.d(TAG, "onSuccess: LIST EMPTY");
                             return;
                         } else {
-                            // Convert the whole Query Snapshot to a list
-                            // of objects directly! No need to fetch each
-                            // document.
+
                             List<Item> types = queryDocumentSnapshots.toObjects(Item.class);
 
                             // Add all to your list
@@ -87,6 +85,7 @@ public class DashboardActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             id = extras.getString("id");
+            rc = extras.getString("rc");
             reggid.setText(id);
         }
 
@@ -107,7 +106,7 @@ public class DashboardActivity extends AppCompatActivity {
         updateDB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateDataB(id);
+                updateDataB(rc);
             }
         });
     }
@@ -223,7 +222,7 @@ public class DashboardActivity extends AppCompatActivity {
                     return;
                 }
 
-                DocumentReference documentReference = db.collection("employee").document(pin);
+                DocumentReference documentReference = db.collection("Employee").document(pin);
                 documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -237,6 +236,7 @@ public class DashboardActivity extends AppCompatActivity {
                                     Toast.makeText(DashboardActivity.this, "Logged in", Toast.LENGTH_LONG).show();
                                     Intent openMenu = new Intent(DashboardActivity.this, RegisterMenuActivity.class);
                                     openMenu.putExtra("PIN", pin);
+                                    openMenu.putExtra("rc", rc);
                                     openMenu.putExtra("itemList", itemArrayList);
                                     openMenu.putExtra("ID", id);
                                     dialogPin.dismiss();

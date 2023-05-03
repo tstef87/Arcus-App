@@ -25,11 +25,10 @@ import com.example.arcus.R;
 import com.example.arcus.signin.Item;
 import com.example.arcus.signin.SignInPage;
 import com.example.arcus.ui.DashboardActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +36,6 @@ import java.util.Locale;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
-import java.util.Objects;
 
 public class RegisterMenuActivity extends AppCompatActivity {
 
@@ -60,7 +58,7 @@ public class RegisterMenuActivity extends AppCompatActivity {
         saleList = sales;
     }
 
-    private void addSale(@NonNull List<String> data, double total, double s, double tax, double tip,  String id, String pin){
+    private void addSale(@NonNull List<String> data, double total, double s, double tax, double tip,  String id, String pin, String rc){
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -72,12 +70,22 @@ public class RegisterMenuActivity extends AppCompatActivity {
         saleInfo.put("Tax", tax);
         saleInfo.put("Tip", tip);
         saleInfo.put("Items", items);
+        saleInfo.put("reg", id);
+        saleInfo.put("rc", rc);
+        saleInfo.put("emp", pin);
         saleInfo.put("Time", now.format(formatter));
-        //saleInfo.put("Receipt", receipt);
 
-        db.collection("registers/"+id+"/Sales").add(saleInfo);
-        db.collection("employee/"+pin+"/Sales").add(saleInfo);
-        db.collection("AllSales").add(saleInfo);
+        db.collection("Sales").add(saleInfo);
+        DocumentReference employeeREF = db.collection("Employee").document(pin);
+        DocumentReference registerREF = db.collection("Registers").document(id);
+
+        employeeREF.update("tips", FieldValue.increment(tip));
+        employeeREF.update("totalSales", FieldValue.increment(1));
+
+        registerREF.update("revenue", FieldValue.increment(total));
+        registerREF.update("salesTotal", FieldValue.increment(1));
+
+
     }
 
     public double getPrice(List <Double> price){
@@ -138,6 +146,8 @@ public class RegisterMenuActivity extends AppCompatActivity {
         ArrayList<Item> items = new ArrayList<>();
         String id = getIntent().getStringExtra("ID");
         String pin = getIntent().getStringExtra("PIN");
+        String rc = getIntent().getStringExtra("rc");
+
         if (extras != null) {
             items = (ArrayList<Item>) getIntent().getSerializableExtra("itemList");
         }
@@ -201,7 +211,7 @@ public class RegisterMenuActivity extends AppCompatActivity {
                 sum = getPrice(priceList);
                 setPriceTV(price);
                 if(!data.isEmpty()) {
-                    tipScreen(view, tipTaxCalc(sum, .2), tipTaxCalc(sum, .18), tipTaxCalc(sum, .15), id, price, listItemAdapter, pin);
+                    tipScreen(view, tipTaxCalc(sum, .2), tipTaxCalc(sum, .18), tipTaxCalc(sum, .15), id, price, listItemAdapter, pin, rc);
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "No Items in List", Toast.LENGTH_SHORT).show();
@@ -381,7 +391,7 @@ public class RegisterMenuActivity extends AppCompatActivity {
     }
 
 
-    public void tipScreen(View view, double tip20, double tip18, double tip15, String id, TextView price, ListItemAdapter listItemAdapter, String pin) {
+    public void tipScreen(View view, double tip20, double tip18, double tip15, String id, TextView price, ListItemAdapter listItemAdapter, String pin, String rc) {
         // Create a new AlertDialog object and set its content to your pop-up layout
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -411,7 +421,7 @@ public class RegisterMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                checkoutScreen(view.getContext(), 0.00, id, price, listItemAdapter, pin);
+                checkoutScreen(view.getContext(), 0.00, id, price, listItemAdapter, pin, rc);
             }
         });
 
@@ -419,7 +429,7 @@ public class RegisterMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                checkoutScreen(view.getContext(), tip20, id, price, listItemAdapter, pin);
+                checkoutScreen(view.getContext(), tip20, id, price, listItemAdapter, pin, rc);
             }
         });
 
@@ -427,7 +437,7 @@ public class RegisterMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                checkoutScreen(view.getContext(), tip18, id, price, listItemAdapter, pin);
+                checkoutScreen(view.getContext(), tip18, id, price, listItemAdapter, pin, rc);
             }
         });
 
@@ -435,12 +445,12 @@ public class RegisterMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                checkoutScreen(view.getContext(), tip15, id, price, listItemAdapter, pin);
+                checkoutScreen(view.getContext(), tip15, id, price, listItemAdapter, pin, rc);
             }
         });
     }
     @SuppressLint("SetTextI18n")
-    public void checkoutScreen(Context context, double tip, String id, TextView price, ListItemAdapter listItemAdapter, String pin){
+    public void checkoutScreen(Context context, double tip, String id, TextView price, ListItemAdapter listItemAdapter, String pin, String rc){
         Dialog dialogCheckOut = new Dialog(context);
         dialogCheckOut.setContentView(R.layout.checkout_prompt);
         dialogCheckOut.show();
@@ -464,7 +474,7 @@ public class RegisterMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialogCheckOut.dismiss();
-                addSale(data, total, sum, taxSum, tip, id, pin);
+                addSale(data, total, sum, taxSum, tip, id, pin, rc);
                 Item i = new Item();
                 sum = 0.00;
                 data.clear();

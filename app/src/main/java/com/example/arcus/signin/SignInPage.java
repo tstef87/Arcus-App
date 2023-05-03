@@ -65,7 +65,7 @@ public class SignInPage extends AppCompatActivity implements View.OnClickListene
             return;
         }
 
-        DocumentReference documentReference = db.collection("registers").document(user);
+        DocumentReference documentReference = db.collection("Registers").document(user);
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -80,6 +80,8 @@ public class SignInPage extends AppCompatActivity implements View.OnClickListene
                             Toast.makeText(SignInPage.this, "Logged in", Toast.LENGTH_LONG).show();
                             Intent signin = new Intent(SignInPage.this, DashboardActivity.class);
                             signin.putExtra("id", user);
+                            String rc = (String) documentSnapshot.get("revenueCenter");
+                            signin.putExtra("rc",rc);
                             startActivity(signin);
 
                         }
