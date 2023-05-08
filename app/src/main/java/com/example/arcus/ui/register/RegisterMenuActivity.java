@@ -25,7 +25,10 @@ import com.example.arcus.R;
 import com.example.arcus.signin.Item;
 import com.example.arcus.signin.SignInPage;
 import com.example.arcus.ui.DashboardActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -48,6 +51,7 @@ public class RegisterMenuActivity extends AppCompatActivity {
     public List <String> data;
     public List<Double> priceList;
     public TableRow tableRow;
+    public String idPub = "";
 
     public double sum = 0.00;
 
@@ -78,6 +82,7 @@ public class RegisterMenuActivity extends AppCompatActivity {
         db.collection("Sales").add(saleInfo);
         DocumentReference employeeREF = db.collection("Employee").document(pin);
         DocumentReference registerREF = db.collection("Registers").document(id);
+        DocumentReference revCenterRef = db.collection("RevenueCenter").document(rc);
 
         employeeREF.update("tips", FieldValue.increment(tip));
         employeeREF.update("totalSales", FieldValue.increment(1));
@@ -85,7 +90,8 @@ public class RegisterMenuActivity extends AppCompatActivity {
         registerREF.update("revenue", FieldValue.increment(total));
         registerREF.update("salesTotal", FieldValue.increment(1));
 
-
+        revCenterRef.update("revenue", FieldValue.increment(total));
+        revCenterRef.update("sales", FieldValue.increment(1));
     }
 
     public double getPrice(List <Double> price){
@@ -94,6 +100,28 @@ public class RegisterMenuActivity extends AppCompatActivity {
             total += price.get(i);
         }
         return fmt(total);
+    }
+
+    public void getName(String id, TextView textView){
+
+        DocumentReference documentReference = db.collection("Employee").document(id);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()){
+
+                        String fName = (String) documentSnapshot.get("fname");
+                        String lName = (String) documentSnapshot.get("lname");
+                        System.out.println(fName + " " + lName);
+                        textView.setText(fName + " " + lName);
+
+                    }
+                }
+            }
+        });
+
     }
 
     public void setPriceTV (TextView textView){
@@ -125,6 +153,7 @@ public class RegisterMenuActivity extends AppCompatActivity {
         return fmt(total * times);
     }
 
+    public String rc;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -139,14 +168,18 @@ public class RegisterMenuActivity extends AppCompatActivity {
         data = new ArrayList<String>();
         priceList = new ArrayList<Double>();
         ListItemAdapter listItemAdapter = new ListItemAdapter(data, saleList, priceList, sum, price);
-        //adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
 
 
         Bundle extras = getIntent().getExtras();
         ArrayList<Item> items = new ArrayList<>();
         String id = getIntent().getStringExtra("ID");
+        idPub = id;
         String pin = getIntent().getStringExtra("PIN");
-        String rc = getIntent().getStringExtra("rc");
+        rc = getIntent().getStringExtra("rc");
+
+        TextView cash = findViewById(R.id.cashName);
+
+        getName(pin, cash);
 
         if (extras != null) {
             items = (ArrayList<Item>) getIntent().getSerializableExtra("itemList");
@@ -178,8 +211,6 @@ public class RegisterMenuActivity extends AppCompatActivity {
             itemButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
                    int index = checkList(saleList, item.getName());
 
@@ -235,7 +266,10 @@ public class RegisterMenuActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.signoutItem:
-                startActivity(new Intent(RegisterMenuActivity.this, DashboardActivity.class));
+                Intent i = new Intent(RegisterMenuActivity.this, DashboardActivity.class);
+                i.putExtra("id", idPub);
+                i.putExtra("rc", rc);
+                startActivity(i);
                 return true;
 
             case R.id.logoutItem:

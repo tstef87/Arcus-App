@@ -1,5 +1,7 @@
 package com.example.arcus.ui.register;
 
+import java.text.DecimalFormat;
+
 public class Sales {
 
     private String name;
@@ -43,8 +45,9 @@ public class Sales {
         this.price = price;
     }
 
+    DecimalFormat moneyFormat = new DecimalFormat("$0.00");
     @Override
     public String toString() {
-        return "x"+ amount + " " + name + " " + (price * amount);
+        return "x"+ amount + " " + name + " " + moneyFormat.format(price * amount);
     }
 }

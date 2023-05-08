@@ -1,14 +1,10 @@
 package com.example.arcus.ui;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -17,21 +13,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.arcus.R;
 import com.example.arcus.signin.Item;
 import com.example.arcus.signin.SignInPage;
-import com.example.arcus.ui.register.ListItemAdapter;
 import com.example.arcus.ui.register.RegisterMenuActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -43,33 +38,48 @@ public class DashboardActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
-    private static ArrayList<Item> itemArrayList = new ArrayList<>();;
+    private static ArrayList<Item> itemArrayList = new ArrayList<>();
+    private static ArrayList<String> itemIDCalls = new ArrayList<>();
     private String id, rc = "";
+
+
+    private void getQueryArray(String id) {
+
+        DocumentReference documentReference = db.collection("RevenueCenter").document(id);
+        List<String> q;
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    assert documentSnapshot != null;
+                    if (documentSnapshot.exists()){
+                        queryArray((ArrayList<String>) documentSnapshot.get("items"));
+                    }
+                }
+            }
+        });
+    }
+
+    private void queryArray(List<String> q){
+        CollectionReference itemRef = db.collection("Items");
+        Query query = itemRef.whereIn("idCall", q);
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                for (DocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+                    Item item = documentSnapshot.toObject(Item.class);
+                    itemArrayList.add(item);
+                }
+            }
+        });
+    }
 
     private void updateDataB(String id){
         itemArrayList.clear();
-        db.collection("RevenueCenter/"+id+"/ItemList").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (queryDocumentSnapshots.isEmpty()) {
-                            Log.d(TAG, "onSuccess: LIST EMPTY");
-                            return;
-                        } else {
-
-                            List<Item> types = queryDocumentSnapshots.toObjects(Item.class);
-
-                            // Add all to your list
-                            itemArrayList.addAll(types);
-                            Log.d(TAG, "onSuccess: " + itemArrayList);
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Error getting data!!!", Toast.LENGTH_LONG).show();
-                    }
-                });
+        itemIDCalls.clear();
+        getQueryArray(id);
     }
 
 
@@ -78,6 +88,8 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        itemArrayList.clear();
+        itemIDCalls.clear();
 
 
         TextView reggid = findViewById(R.id.reg_id);
@@ -243,7 +255,6 @@ public class DashboardActivity extends AppCompatActivity {
                                     startActivity(openMenu);
 
                                 }
-
                             }
                         }
                         else{

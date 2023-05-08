@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SignInPage extends AppCompatActivity implements View.OnClickListener {
 
     private EditText editTextUsername, editTextPassword;
-    private ProgressBar progressBar;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -37,8 +36,6 @@ public class SignInPage extends AppCompatActivity implements View.OnClickListene
 
         editTextUsername = (EditText) findViewById(R.id.username);
         editTextPassword = (EditText) findViewById(R.id.password);
-
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
     }
 
@@ -76,7 +73,6 @@ public class SignInPage extends AppCompatActivity implements View.OnClickListene
 
 
                         if(p.equals(pw)){
-                            progressBar.setVisibility(View.VISIBLE);
                             Toast.makeText(SignInPage.this, "Logged in", Toast.LENGTH_LONG).show();
                             Intent signin = new Intent(SignInPage.this, DashboardActivity.class);
                             signin.putExtra("id", user);
@@ -89,9 +85,7 @@ public class SignInPage extends AppCompatActivity implements View.OnClickListene
                     }
                 }
                 else{
-                    progressBar.setVisibility(View.VISIBLE);
                     Toast.makeText(SignInPage.this, "Something went wrong", Toast.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
         });
