@@ -81,6 +81,10 @@ public class SignInPage extends AppCompatActivity implements View.OnClickListene
                             startActivity(signin);
 
                         }
+                        else{
+                            Toast.makeText(SignInPage.this, "Invalid Login", Toast.LENGTH_LONG).show();
+
+                        }
 
                     }
                 }
@@ -89,6 +93,7 @@ public class SignInPage extends AppCompatActivity implements View.OnClickListene
                 }
             }
         });
+
 
 
     }

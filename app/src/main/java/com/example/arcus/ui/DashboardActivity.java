@@ -63,17 +63,27 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void queryArray(List<String> q){
         CollectionReference itemRef = db.collection("Items");
-        Query query = itemRef.whereIn("idCall", q);
-        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+        int batchSize = 10;
+        List<List<String>> batches = new ArrayList<>();
 
-                for (DocumentSnapshot documentSnapshot: queryDocumentSnapshots){
-                    Item item = documentSnapshot.toObject(Item.class);
-                    itemArrayList.add(item);
+        // Split the list into batches of batchSize
+        for (int i = 0; i < q.size(); i += batchSize) {
+            batches.add(q.subList(i, Math.min(i + batchSize, q.size())));
+        }
+
+        // Query for each batch of values
+        for (List<String> batch : batches) {
+            Query query = itemRef.whereIn("idCall", batch);
+            query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    for (DocumentSnapshot documentSnapshot: queryDocumentSnapshots){
+                        Item item = documentSnapshot.toObject(Item.class);
+                        itemArrayList.add(item);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void updateDataB(String id){

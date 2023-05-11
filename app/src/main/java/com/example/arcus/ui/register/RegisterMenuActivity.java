@@ -83,6 +83,8 @@ public class RegisterMenuActivity extends AppCompatActivity {
         DocumentReference employeeREF = db.collection("Employee").document(pin);
         DocumentReference registerREF = db.collection("Registers").document(id);
         DocumentReference revCenterRef = db.collection("RevenueCenter").document(rc);
+        DocumentReference numRef = db.collection("Nums").document("num");
+
 
         employeeREF.update("tips", FieldValue.increment(tip));
         employeeREF.update("totalSales", FieldValue.increment(1));
@@ -92,6 +94,10 @@ public class RegisterMenuActivity extends AppCompatActivity {
 
         revCenterRef.update("revenue", FieldValue.increment(total));
         revCenterRef.update("sales", FieldValue.increment(1));
+
+        numRef.update("revenue", FieldValue.increment(total));
+        numRef.update("sales", FieldValue.increment(1));
+
     }
 
     public double getPrice(List <Double> price){
